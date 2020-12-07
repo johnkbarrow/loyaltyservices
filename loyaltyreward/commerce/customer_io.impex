@@ -1,0 +1,62 @@
+INSERT_UPDATE IntegrationObject; code[unique = true]; integrationType(code) 
+; Customer; INBOUND 
+ 
+INSERT_UPDATE IntegrationObjectItem; integrationObject(code)[unique = true]; code[unique = true]; type(code); root[default = false] 
+; Customer  ; Gender            ; Gender            ;   ;  
+; Customer  ; Address           ; Address           ;   ;  
+; Customer  ; Title             ; Title             ;   ;  
+; Customer  ; UserGroup         ; UserGroup         ;   ;  
+; Customer  ; Language          ; Language          ;   ;  
+; Customer  ; Country           ; Country           ;   ;  
+; Customer  ; Customer          ; Customer          ;   ;  
+; Customer  ; Region            ; Region            ;   ;  
+; Customer  ; UserPriceGroup    ; UserPriceGroup    ;   ;  
+; Customer  ; UserDiscountGroup ; UserDiscountGroup ;   ;  
+ 
+INSERT_UPDATE IntegrationObjectItemAttribute; integrationObjectItem(integrationObject(code), code)[unique = true]; attributeName[unique = true]; attributeDescriptor(enclosingType(code), qualifier); returnIntegrationObjectItem(integrationObject(code), code); unique[default = false]; autoCreate[default = false] 
+; Customer:Gender               ; code              ; Gender:code               ;                           ;   ;  
+; Customer:Address              ; billingAddress    ; Address:billingAddress    ;                           ;   ;  
+; Customer:Address              ; cellphone         ; Address:cellphone         ;                           ;   ;  
+; Customer:Address              ; shippingAddress   ; Address:shippingAddress   ;                           ;   ;  
+; Customer:Address              ; company           ; Address:company           ;                           ;   ;  
+; Customer:Address              ; phone1            ; Address:phone1            ;                           ;   ;  
+; Customer:Address              ; fax               ; Address:fax               ;                           ;   ;  
+; Customer:Address              ; region            ; Address:region            ; Customer:Region       ;   ;  
+; Customer:Address              ; country           ; Address:country           ; Customer:Country      ;   ;  
+; Customer:Address              ; town              ; Address:town              ;                           ;   ;  
+; Customer:Address              ; postalcode        ; Address:postalcode        ;                           ;   ;  
+; Customer:Address              ; streetname        ; Address:streetname        ;                           ;   ;  
+; Customer:Address              ; streetnumber      ; Address:streetnumber      ;                           ;   ;  
+; Customer:Address              ; duplicate         ; Address:duplicate         ;                           ; true  ;  
+; Customer:Address              ; publicKey         ; Address:publicKey         ;                           ; true  ;  
+; Customer:Address              ; pobox             ; Address:pobox             ;                           ;   ;  
+; Customer:Address              ; district          ; Address:district          ;                           ;   ;  
+; Customer:Title                ; code              ; Title:code                ;                           ;   ;  
+; Customer:UserGroup            ; uid               ; UserGroup:uid             ;                           ;   ;  
+; Customer:Language             ; isocode           ; Language:isocode          ;                           ;   ;  
+; Customer:Country              ; isocode           ; Country:isocode           ;                           ;   ;  
+; Customer:Customer             ; name              ; Customer:name             ;                           ;   ;  
+; Customer:Customer             ; customerID        ; Customer:customerID       ;                           ;   ;  
+; Customer:Customer             ; uid               ; Customer:uid              ;                           ; true  ;  
+; Customer:Customer             ; addresses         ; Customer:addresses        ; Customer:Address      ;   ;  
+; Customer:Customer             ; loginDisabled     ; Customer:loginDisabled    ;                           ;   ;  
+; Customer:Customer             ; groups            ; Customer:groups           ; Customer:UserGroup    ;   ;  
+; Customer:Customer             ; title             ; Customer:title            ; Customer:Title        ;   ;  
+; Customer:Customer             ; sessionLanguage   ; Customer:sessionLanguage  ; Customer:Language     ;   ;  
+; Customer:Region               ; isocode           ; Region:isocode            ;                           ;   ;  
+; Customer:UserPriceGroup       ; code              ; UserPriceGroup:code       ;                           ;   ;  
+; Customer:UserDiscountGroup    ; code              ; UserDiscountGroup:code    ;                           ;   ;  
+
+
+INSERT_UPDATE Employee;uid[unique=true];password;groups(uid);
+;ODATAUSER;odata1234;integrationadmingroup;
+
+INSERT_UPDATE BasicCredential;id[unique=true];username;password
+;odatauser-credential;ODATAUSER;odata1234
+
+INSERT_UPDATE Endpoint;id[unique=true];name;version[unique=true];description;specUrl;specData;extensionName
+;cc-customer;Customer Service;v1;"Customer Integration Object";{ccv2.services.api.url.0}/odata2webservices/Customer/$metadata;;odata2webservices
+
+INSERT_UPDATE ExposedDestination;id[unique=true];url;endpoint(id)[unique=true];additionalProperties(key,value)[map-delimiter=|];destinationTarget(id)[default=Default_Template];active[default=true];credential(id)
+;cc-customer;{ccv2.services.api.url.0}/odata2webservices/Customer;cc-customer;;<ENTER YOUR DESTINATION HERE!!!!>;;odatauser-credential
+

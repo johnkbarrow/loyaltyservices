@@ -1,0 +1,18 @@
+apiVersion: eventing.knative.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: purchasetracker-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      eventtypeversion: v1
+      source: mp-services-ccv2  	# CHANGE THIS to name of the application/system
+      type: order.created   	# CHANGE THIS to event type
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: purchasetracker 	# CHANGE THIS to match Service
+      namespace: faberlic        # CHANGE THIS to match Service namespace
+      

@@ -1,0 +1,17 @@
+apiVersion: eventing.knative.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: loyaltyreward-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      eventtypeversion: v1
+      source: purchase-tracker     	# CHANGE THIS to name of the application/system
+      type: purchase.made   		# CHANGE THIS to event type
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: loyaltyreward      		# CHANGE THIS to match Service
+      namespace: faberlic        	# CHANGE THIS to match Service namespace

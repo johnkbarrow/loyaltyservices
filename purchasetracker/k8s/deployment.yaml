@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: purchasetracker
+  labels:
+    app: purchasetracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: purchasetracker
+  template:
+    metadata:
+      labels:
+        app: purchasetracker
+      annotations:
+        traffic.sidecar.istio.io/excludeOutboundPorts: "10255"
+    spec:
+      containers:
+      - image: "docker.io/pscoec4f/purchasetracker:0.0.2-SNAPSHOT"
+        name: purchasetracker
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+        env:
+        - name: OUTBOUND_CONNECTED_SYSTEM
+          value: "purchase-tracker"
+        - name: OUTBOUND_EVENT_TYPE
+          value: "purchase.made"
+        - name: PROMOTION_ID
+          value: "loyaltycustomers_percentage_discount_cart"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: purchasetracker
+  labels:
+    app: purchasetracker
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: purchasetracker
+  type: ClusterIP
